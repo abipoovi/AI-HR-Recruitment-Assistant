@@ -1,0 +1,591 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI HR Recruitment Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">🤖</div>
+        <div>
+            <div class="brand-name">AI HR</div>
+            <div class="brand-subtitle">Recruitment Intelligence</div>
+        </div>
+    </div>
+
+    <div class="sidebar-section">WORKSPACE</div>
+
+    <button class="sidebar-item active"
+            onclick="navigateSection('screening', this)">
+        <span>📊</span> Candidate Screening
+    </button>
+
+    <button class="sidebar-item"
+            onclick="navigateSection('skillMatching', this)">
+        <span>🎯</span> Skill Matching
+    </button>
+
+    <button class="sidebar-item"
+            onclick="navigateSection('interviewQuestions', this)">
+        <span>🎤</span> Interview Questions
+    </button>
+
+    <div class="sidebar-bottom">
+        <strong>AI Decision Support</strong>
+        <p>
+            The system evaluates job-related qualifications
+            and assists HR professionals during candidate screening.
+        </p>
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+        <div class="breadcrumb">
+            Recruitment <span>/</span> Candidate Analysis
+        </div>
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+            AI SYSTEM ONLINE
+        </div>
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div>
+            <div class="hero-tag">AGENTIC AI RECRUITMENT</div>
+
+            <h1>AI HR Recruitment Assistant</h1>
+
+            <p>
+                Analyze candidate resumes, match skills with job
+                requirements, identify skill gaps and generate
+                interview questions.
+            </p>
+        </div>
+
+        <div class="hero-graphic">
+            <div class="hero-circle">AI</div>
+        </div>
+
+    </section>
+
+
+    <!-- ================= CANDIDATE SCREENING ================= -->
+
+    <section id="screening">
+
+        <div class="section-heading">
+            <div>
+                <h2>Candidate Information</h2>
+                <p>Enter the basic candidate details.</p>
+            </div>
+        </div>
+
+        <div class="candidate-form">
+
+            <div class="form-group">
+                <label>Candidate Name</label>
+                <input type="text"
+                       id="candidateName"
+                       placeholder="e.g. Abinaya M">
+            </div>
+
+            <div class="form-group">
+                <label>Position</label>
+                <input type="text"
+                       id="position"
+                       placeholder="e.g. Python AI Developer">
+            </div>
+
+        </div>
+
+
+        <!-- RESUME AND JOB DESCRIPTION -->
+
+        <div class="section-heading">
+            <div>
+                <h2>Candidate & Job Details</h2>
+                <p>
+                    Provide the resume and job description
+                    for AI analysis.
+                </p>
+            </div>
+        </div>
+
+        <div class="input-grid">
+
+            <!-- RESUME -->
+
+            <div class="input-card">
+
+                <div class="input-card-header">
+
+                    <div class="input-icon resume-icon">📄</div>
+
+                    <div>
+                        <h3>Candidate Resume</h3>
+                        <p>Resume information</p>
+                    </div>
+
+                </div>
+
+                <textarea
+                    id="resume"
+                    placeholder="Paste the candidate resume here...
+
+Example:
+
+Abinaya M
+Computer Science Engineering Student
+
+Technical Skills:
+Python
+Java
+SQL
+Machine Learning
+Pandas
+NumPy
+Streamlit
+Git
+
+Projects:
+AI Resume Screening System
+Student Support Chatbot"
+                ></textarea>
+
+                <div class="input-footer">
+                    <span>Job-related information only</span>
+                </div>
+
+            </div>
+
+
+            <!-- JOB DESCRIPTION -->
+
+            <div class="input-card">
+
+                <div class="input-card-header">
+
+                    <div class="input-icon job-icon">💼</div>
+
+                    <div>
+                        <h3>Job Description</h3>
+                        <p>Position requirements</p>
+                    </div>
+
+                </div>
+
+                <textarea
+                    id="jobDescription"
+                    placeholder="Paste the job description here...
+
+Example:
+
+Python AI Developer
+
+Requirements:
+Python
+Machine Learning
+SQL
+Pandas
+NumPy
+Git
+RAG
+LangChain
+LangGraph
+Generative AI
+
+Preferred:
+Streamlit
+Flask
+Docker"
+                ></textarea>
+
+                <div class="input-footer">
+                    <span>Required and preferred skills</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ANALYZE BUTTON -->
+
+        <div class="analyze-section">
+
+            <button
+                id="analyzeButton"
+                class="analyze-button"
+                onclick="analyzeCandidate()">
+
+                <span id="buttonIcon">✨</span>
+                <span id="buttonText">Analyze Candidate</span>
+
+            </button>
+
+            <p class="analyze-hint">
+                AI will analyze the candidate using LangGraph,
+                recruitment tools, RAG and Groq cloud AI.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= LOADING ================= -->
+
+    <section id="loading" class="loading-card hidden">
+
+        <div class="loader"></div>
+
+        <div>
+            <h3>AI Recruitment Agent is working</h3>
+            <p id="loadingText">Analyzing candidate resume...</p>
+        </div>
+
+    </section>
+
+
+    <!-- ================= RESULTS ================= -->
+
+    <section id="results" class="hidden">
+
+
+        <!-- PROFILE -->
+
+        <div class="profile-card">
+
+            <div class="profile-avatar">👤</div>
+
+            <div>
+                <h2 id="resultCandidate">Candidate</h2>
+                <p id="resultPosition">Position</p>
+            </div>
+
+            <div class="profile-badge">ANALYZED</div>
+
+        </div>
+
+
+        <!-- OVERVIEW -->
+
+        <div class="section-heading">
+            <div>
+                <h2>Recruitment Overview</h2>
+                <p>AI-powered candidate evaluation results.</p>
+            </div>
+        </div>
+
+
+        <div class="metrics-grid">
+
+            <!-- MATCH -->
+
+            <div class="metric score-metric">
+
+                <div class="metric-top">
+                    <span>Overall Match</span>
+                    <span>🎯</span>
+                </div>
+
+                <div id="matchScore" class="big-score">0%</div>
+
+                <div class="progress">
+                    <div id="scoreProgress" class="progress-fill"></div>
+                </div>
+
+            </div>
+
+
+            <!-- RESUME SKILLS -->
+
+            <div class="metric">
+                <div class="metric-icon">📄</div>
+
+                <div id="resumeSkillCount" class="metric-number">0</div>
+
+                <div class="metric-label">Skills Detected</div>
+            </div>
+
+
+            <!-- MATCHING -->
+
+            <div class="metric">
+                <div class="metric-icon">✅</div>
+
+                <div id="matchingCount" class="metric-number">0</div>
+
+                <div class="metric-label">Matching Skills</div>
+            </div>
+
+
+            <!-- MISSING -->
+
+            <div class="metric">
+                <div class="metric-icon">⚠️</div>
+
+                <div id="missingCount" class="metric-number">0</div>
+
+                <div class="metric-label">Skill Gaps</div>
+            </div>
+
+        </div>
+
+
+        <!-- ================= SKILL MATCHING ================= -->
+
+        <div id="skillMatching" class="skill-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Skill Matching Analysis</h2>
+                    <p>
+                        Compare candidate skills with job requirements.
+                    </p>
+                </div>
+            </div>
+
+            <div class="skill-grid">
+
+                <div class="result-card">
+
+                    <div class="result-card-title">
+                        <span>✅</span> Matching Skills
+                    </div>
+
+                    <div id="matchingSkills"
+                         class="skills-container">
+                    </div>
+
+                </div>
+
+
+                <div class="result-card">
+
+                    <div class="result-card-title">
+                        <span>⚠️</span> Missing Skills
+                    </div>
+
+                    <div id="missingSkills"
+                         class="skills-container">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RESULT TABS ================= -->
+
+        <div class="tabs">
+
+            <button class="tab-button active"
+                    onclick="showTab('analysis', this)">
+                🤖 AI Analysis
+            </button>
+
+            <button class="tab-button"
+                    onclick="showTab('questions', this)">
+                🎤 Interview Questions
+            </button>
+
+            <button class="tab-button"
+                    onclick="showTab('skills', this)">
+                📄 Resume Skills
+            </button>
+
+            <button class="tab-button"
+                    onclick="showTab('rag', this)">
+                📚 HR Knowledge
+            </button>
+
+        </div>
+
+
+        <!-- AI ANALYSIS -->
+
+        <div id="analysis" class="tab-content active">
+
+            <div class="result-card">
+
+                <div class="result-card-title">
+                    🤖 AI Recruitment Analysis
+                </div>
+
+                <div id="finalAnswer"
+                     class="analysis-content">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= INTERVIEW QUESTIONS ================= -->
+
+        <div id="questions" class="tab-content">
+
+            <div class="result-card">
+
+                <div class="result-card-title">
+                    🎤 Generated Interview Questions
+                </div>
+
+                <div id="interviewQuestions"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESUME SKILLS -->
+
+        <div id="skills" class="tab-content">
+
+            <div class="result-card">
+
+                <div class="result-card-title">
+                    📄 Candidate Resume Skills
+                </div>
+
+                <div id="resumeSkills"
+                     class="skills-container">
+                </div>
+
+                <div class="sub-heading">
+                    Job Required Skills
+                </div>
+
+                <div id="jobSkills"
+                     class="skills-container">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HR KNOWLEDGE -->
+
+        <div id="rag" class="tab-content">
+
+            <div class="result-card">
+
+                <div class="result-card-title">
+                    📚 Retrieved HR Knowledge
+                </div>
+
+                <div id="ragKnowledge"
+                     class="rag-content">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= AGENT PIPELINE ================= -->
+
+        <div class="pipeline-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Agent Execution Pipeline</h2>
+                    <p>Your LangGraph workflow</p>
+                </div>
+            </div>
+
+            <div class="pipeline">
+
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">📄</div>
+                    <span>Resume</span>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🧠</div>
+                    <span>Skill Extraction</span>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🎯</div>
+                    <span>Skill Matching</span>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">📚</div>
+                    <span>HR RAG</span>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🎤</div>
+                    <span>Interview Tool</span>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🤖</div>
+                    <span>Groq AI Agent</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEW ANALYSIS -->
+
+        <button class="new-analysis" onclick="newAnalysis()">
+            ↻ Start New Candidate Analysis
+        </button>
+
+    </section>
+
+
+    <!-- ERROR -->
+
+    <div id="errorBox" class="error-box hidden"></div>
+
+</main>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
