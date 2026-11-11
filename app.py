@@ -1,7 +1,14 @@
 # =============================================================
 # LAB — AI HR RECRUITMENT ASSISTANT
 # =============================================================
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+api_key = os.getenv("GROQ_API_KEY")
+
+print("Groq API Key loaded:", bool(api_key))
 from typing import TypedDict, List
 from langgraph.graph import StateGraph
 from langchain_groq import ChatGroq
